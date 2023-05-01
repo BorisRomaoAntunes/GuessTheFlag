@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
-    @State private var pontos = 0
+    @State private var points = [0,0]
     
     @State private var coutries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
    @State private var correctAnswe =  Int.random(in: 0...2)
@@ -46,7 +46,7 @@ struct ContentView: View {
                         Text(coutries[correctAnswe])
                             .font(.largeTitle.weight(.semibold))
                     }
-                    
+                
                     ForEach(0..<3){ number in
                         Button {
                            flagTapped(number)
@@ -54,7 +54,7 @@ struct ContentView: View {
                         } label: {
                             Image(coutries[number])
                                 .renderingMode(.original)
-                                .clipShape(Capsule())
+                                .clipShape(RoundedRectangle(cornerRadius: 15))
                                 .shadow(radius: 5)
                         }
                     }
@@ -67,32 +67,49 @@ struct ContentView: View {
                 Spacer()
                 Spacer()
                 
-                Text ("Score: \(pontos)")
+                Text ("Score: \(points[0])")
                     .foregroundColor(.white)
                     .font(.title.bold())
+                
+                if points[1] > 0 {
+                    Text ("Wrong: \(points[1])")
+                        .foregroundStyle(.secondary)
+                        .font(.subheadline.weight(.heavy))
+                }
                 Spacer()
             }
             .padding()
         }
             .alert(scoreTitle, isPresented: $showingScore){
                 Button("Continue", action: askQueston)
-            } message: {
-                Text("Your scorre is \(pontos)")
+             } message: {
+                Text("""
+                    Your scorre is: \(points[0])
+                    Your Wrong is: \(points[1])
+                    """)
         }
     }
     func flagTapped (_ number: Int){
-        if number == correctAnswe {
-            scoreTitle = "Correct 😃"
-            pontos = pontos + 1
-        } else {
-            scoreTitle = "Wrong 🤦🏿‍♂️"
+            if number == correctAnswe {
+                scoreTitle = "Correct 😃"
+                points[0] += 1
+            } else {
+                scoreTitle = """
+                    Wrong 🤦🏿‍♂️
+                    This is the flag of \(coutries[number])
+                    """
+                points[1] += 1
+            }
+      //  while (points[0] + points [1]) < 1{
+            showingScore = true
+        //} 
         }
-        showingScore = true
-    }
+    
     func askQueston(){
         coutries.shuffle()
         correctAnswe = Int.random(in: 0...2)
     }
+    
 }
         
 struct ContentView_Previews: PreviewProvider {
