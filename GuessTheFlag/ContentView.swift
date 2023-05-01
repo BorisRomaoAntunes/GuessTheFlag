@@ -94,6 +94,7 @@ struct ContentView: View {
                 scoreTitle = "Correct 😃"
                 points[0] += 1
             } else {
+                
                 scoreTitle = """
                     Wrong 🤦🏿‍♂️
                     This is the flag of \(coutries[number])
@@ -102,7 +103,7 @@ struct ContentView: View {
             }
       //  while (points[0] + points [1]) < 1{
             showingScore = true
-        //} 
+        //}
         }
     
     func askQueston(){
